@@ -49,6 +49,8 @@ func NewClient(db *gorm.DB) *Client {
 	return &Client{db}
 }
 
+// 判断传入的错误 err 是否是一个由于尝试插入或更新数据库时违反了唯一性约束
+// （如主键或唯一索引）而导致的重复项错误
 func IsDuplicateEntryErr(err error) bool {
 	var mysqlErr *mysql2.MySQLError
 	return errors.As(err, &mysqlErr) && mysqlErr.Number == DuplicateEntryErrCode
