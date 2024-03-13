@@ -1,6 +1,10 @@
 package task
 
-import "context"
+import (
+	"context"
+	"gotimer/common/conf"
+	"gotimer/pkg/redis"
+)
 
 type TaskCache struct {
 	client       cacheClient
