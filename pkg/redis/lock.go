@@ -15,6 +15,13 @@ type DistributeLocker interface {
 	ExpireLock(ctx context.Context, expireSeconds int64) error
 }
 
+/*
+可重入式分布式锁通过在锁内部维护一个token来实现。
+每次获取锁时，会检查token是否匹配当前线程或进程，如果匹配则直接返回，否则进行锁的获取操作。
+
+相比一般的分布式锁，可重入式分布式锁在同一线程或进程多次获取同一把锁时不会阻塞，
+因为它能够识别并允许这种行为。这样可以避免死锁情况的发生，提高了灵活性和易用性。
+*/
 type ReentrantDistributeLock struct {
 	key    string
 	token  string
