@@ -40,7 +40,7 @@ func GetClient(confProvider *conf.MysqlConfProvider) (*Client, error) {
 	if err != nil {
 		panic(err)
 	}
-	_db.SetMaxIdleConns(conf.MaxIdleCoons)
+	_db.SetMaxIdleConns(conf.MaxIdleConns)
 	_db.SetMaxOpenConns(conf.MaxOpenConns)
 	return &Client{db}, nil
 }

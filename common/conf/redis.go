@@ -1,7 +1,7 @@
 package conf
 
 type RedisConfig struct {
-	NetWork            string `yaml:"net_work"`
+	Network            string `yaml:"net_work"`
 	Address            string `yaml:"address"`
 	Password           string `yaml:"password"`
 	MaxIdle            int    `yaml:"maxIdle"`
