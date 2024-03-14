@@ -8,7 +8,7 @@ import (
 	"time"
 )
 
-// unix 是一个代表时间的 64 位整数，通常是自 1970 年 1 月 1 日 00:00:00 UTC 起的秒数
+// 返回 任务id_unix时间
 func UnionTimerIDUnix(timeID uint, unix int64) string { return fmt.Sprintf("%d_%d", timeID, unix) }
 
 func SplitTimerIDUnix(str string) (uint, int64, error) {
