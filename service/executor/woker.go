@@ -25,6 +25,7 @@ type Worker struct {
 	reporter     *promethus.Reporter
 }
 
+// start作用  提前两秒将任务缓存到节点内存
 func (w *Worker) Start(ctx context.Context) {
 	w.timerService.Start(ctx)
 }

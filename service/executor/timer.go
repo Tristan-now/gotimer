@@ -90,6 +90,8 @@ func (t *TimerService) Start(ctx context.Context) {
 			t.ctx, t.stop = context.WithCancel(ctx)
 			//变量stepMinutes，它从一个配置提供程序获取值，
 			//然后创建一个定时器，该定时器根据stepMinutes定义的间隔触发
+			//定时器是一个通道，每隔设定时间会向通道中发送一个信号（一般是当前的时间 time.Now()）
+			//如果不手动关闭 ticker就会在for range 下一直循环
 			stepMinutes := t.confProvider.Get().TimerDetailCacheMinutes
 			ticker := time.NewTicker(time.Duration(stepMinutes) * time.Minute)
 			defer ticker.Stop()
