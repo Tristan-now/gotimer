@@ -71,6 +71,7 @@ func (t *TimerDAO) Transaction(ctx context.Context, do func(ctx context.Context,
 	})
 }
 
+// 将task切片从po -> mysql
 func (t *TimerDAO) BatchCreateRecords(ctx context.Context, tasks []*po.Task) error {
 	return t.client.DB.Model(&po.Task{}).WithContext(ctx).CreateInBatches(tasks, len(tasks)).Error
 }
