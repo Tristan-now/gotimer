@@ -43,6 +43,7 @@ func NewWorkder(executor *executor.Worker, task *TaskService, lockService *redis
 	}
 }
 
+// 开启一个执行器的Start
 func (w *Worker) Start(ctx context.Context) {
 	w.executor.Start(ctx)
 }

@@ -56,7 +56,7 @@ func newRedisConn(conf *conf.RedisConfig) (redis.Conn, error) {
 	}
 
 	conn, err := redis.DialContext(context.Background(),
-		conf.NetWork, conf.Address, redis.DialPassword(conf.Password))
+		conf.Network, conf.Address, redis.DialPassword(conf.Password))
 	if err != nil {
 		log.Errorf("Failed to connect to redis,caused by %s", err)
 		return nil, err
