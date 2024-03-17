@@ -15,7 +15,7 @@ type Task struct {
 	Status   int       `json:"status"`   // 当前状态
 }
 
-type GetTaskReq struct {
+type GetTasksReq struct {
 	PageLimiter
 	TimerID uint `form:"timerID" binding:"required"`
 }
