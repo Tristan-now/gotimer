@@ -29,6 +29,8 @@ func NewCodeMsg(code int32, msg string) CodeMsg {
 	return cm
 }
 
+func NewCodeMsgWithErr(err error) CodeMsg { return CodeMsg{Err: err} }
+
 type PageLimiter struct {
 	Index int `json:"pageIndex" form:"pageIndex"`
 	Size  int `json:"pageSize" form:"pageSize"`

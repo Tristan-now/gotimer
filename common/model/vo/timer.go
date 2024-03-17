@@ -28,8 +28,8 @@ type GetAppTimersReq struct {
 }
 
 type GetTimersByNameReq struct {
-	App  string `form:"app" binding:"required"`
-	Name string `form:"name" binding:"required"`
+	App       string `form:"app" binding:"required"`
+	FuzzyName string `form:"fuzzyName" binding:"required"`
 	PageLimiter
 }
 
