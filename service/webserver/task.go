@@ -28,7 +28,7 @@ func (t *TaskService) GetTask(ctx context.Context, id uint) (*vo.Task, error) {
 
 // 输入一个包含timerID的结构体，结合分页逻辑,返回这个timer对应的task
 func (t *TaskService) GetTasks(ctx context.Context, req *vo.GetTasksReq) ([]*vo.Task, int64, error) {
-	total, err := t.dao.Count(ctx, dao.WithTimerID(req.TimerID), dao.WithStatus([]int32{
+	total, err := t.dao.Count(ctx, dao.WithTimerID(req.TimerID), dao.WithStatuses([]int32{
 		int32(consts.Running),
 		int32(consts.Successed),
 		int32(consts.Failed),

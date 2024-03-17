@@ -23,7 +23,7 @@ type cacheClient interface {
 	MGet(ctx context.Context, keys ...interface{}) ([]string, error)
 }
 
-func NewTaskCache(client cacheClient, confProvider *conf.SchedulerAppConfProvider) *TaskCache {
+func NewTaskCache(client *redis.Client, confProvider *conf.SchedulerAppConfProvider) *TaskCache {
 	return &TaskCache{
 		client:       client,
 		confProvider: confProvider,

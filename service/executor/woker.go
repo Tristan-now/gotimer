@@ -25,6 +25,16 @@ type Worker struct {
 	reporter     *promethus.Reporter
 }
 
+func NewWorker(timerService *TimerService, taskDAO *taskdao.TaskDAO, httpClient *xhttp.JSONClient, bloomFilter *bloom.Filter, reporter *promethus.Reporter) *Worker {
+	return &Worker{
+		timerService: timerService,
+		taskDAO:      taskDAO,
+		httpClient:   httpClient,
+		bloomFilter:  bloomFilter,
+		reporter:     reporter,
+	}
+}
+
 // start作用  提前两秒将任务缓存到节点内存
 func (w *Worker) Start(ctx context.Context) {
 	w.timerService.Start(ctx)

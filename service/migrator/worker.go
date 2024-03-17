@@ -15,13 +15,26 @@ import (
 )
 
 type Worker struct {
-	timerDAO        *timerdao.TimerDAO
-	taskDAO         *taskdao.TaskDAO
-	taskCache       *taskdao.TaskCache
-	cronParser      *cron.CronParser
-	lockService     *redis.Client
-	appConfProvider *mconf.MigratorAppConfProvider
-	pool            pool.WorkerPool
+	timerDAO          *timerdao.TimerDAO
+	taskDAO           *taskdao.TaskDAO
+	taskCache         *taskdao.TaskCache
+	cronParser        *cron.CronParser
+	lockService       *redis.Client
+	appConfigProvider *mconf.MigratorAppConfProvider
+	pool              pool.WorkerPool
+}
+
+func NewWorker(timerDAO *timerdao.TimerDAO, taskDAO *taskdao.TaskDAO, taskCache *taskdao.TaskCache, lockService *redis.Client,
+	cronParser *cron.CronParser, appConfigProvider *mconf.MigratorAppConfProvider) *Worker {
+	return &Worker{
+		pool:              pool.NewGoWorkerPool(appConfigProvider.Get().WorkersNum),
+		timerDAO:          timerDAO,
+		taskDAO:           taskDAO,
+		taskCache:         taskCache,
+		lockService:       lockService,
+		cronParser:        cronParser,
+		appConfigProvider: appConfigProvider,
+	}
 }
 
 // start到end内的task： mysql -> redis
@@ -44,7 +57,7 @@ func (w *Worker) migrate(ctx context.Context) error {
 		return err
 	}
 
-	conf := w.appConfProvider.Get()
+	conf := w.appConfigProvider.Get()
 	now := time.Now()
 	// 每次迁移数据的时间间隔，单位：min
 	//MigrateStepMinutes: 60,
@@ -63,7 +76,7 @@ func (w *Worker) migrate(ctx context.Context) error {
 }
 
 func (w *Worker) Start(ctx context.Context) error {
-	conf := w.appConfProvider.Get()
+	conf := w.appConfigProvider.Get()
 	//      每次迁移数据的时间间隔，单位：min
 	//		MigrateStepMinutes: 60,
 	ticker := time.NewTicker(time.Duration(conf.MigrateStepMinutes) * time.Minute)

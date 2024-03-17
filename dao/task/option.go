@@ -37,7 +37,7 @@ func WithEndTime(end time.Time) Option {
 	}
 }
 
-func WithStatus(status []int32) Option {
+func WithStatus(status int32) Option {
 	return func(d *gorm.DB) *gorm.DB {
 		return d.Where("status = ?", status)
 	}

@@ -33,7 +33,7 @@ type Worker struct {
 	lockService  *redis.Client
 }
 
-func NewWorkder(executor *executor.Worker, task *TaskService, lockService *redis.Client, confProvider *conf.TriggerAppConfProvider) *Worker {
+func NewWorker(executor *executor.Worker, task *TaskService, lockService *redis.Client, confProvider *conf.TriggerAppConfProvider) *Worker {
 	return &Worker{
 		executor:     executor,
 		task:         task,
