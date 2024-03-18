@@ -2,12 +2,14 @@ package webserver
 
 import (
 	"fmt"
-	"github.com/gin-gonic/gin"
-	swaggerFiles "github.com/swaggo/files"
-	gs "github.com/swaggo/gin-swagger"
-	"gotimer/common/conf"
 	"net/http"
 	"sync"
+
+	"github.com/gin-gonic/gin"
+	"github.com/prometheus/client_golang/prometheus/promhttp"
+	"github.com/swaggo/files"
+	gs "github.com/swaggo/gin-swagger"
+	"gotimer/common/conf"
 )
 
 type Server struct {
@@ -31,16 +33,17 @@ func NewServer(timer *TimerAPP, task *TaskApp, confProvider *conf.WebServerAppCo
 		taskApp:      task,
 		confProvider: confProvider,
 	}
+
 	s.engine.Use(CrosHandler())
 
-	s.taskRouter = s.engine.Group("api/timer/v1")
+	s.timerRouter = s.engine.Group("api/timer/v1")
 	s.taskRouter = s.engine.Group("api/task/v1")
 	s.mockRouter = s.engine.Group("api/mock/v1")
 	s.RegisterBaseRouter()
 	s.RegisterMockRouter()
 	s.RegisterTimerRouter()
 	s.RegisterTaskRouter()
-	//s.RegisterMonitorRouter()
+	s.RegisterMonitorRouter()
 	return &s
 }
 
@@ -58,6 +61,9 @@ func (s *Server) start() {
 }
 
 func (s *Server) RegisterBaseRouter() {
+	// issus_3:
+	//go get github.com/swaggo/gin-swagger/swaggerFiles 你发现怎么都搞不定 github.com确实没有 因为他改名了
+	//go get github.com/swaggo/gin-swagger/files
 	s.engine.GET("/swagger/*any", gs.WrapHandler(swaggerFiles.Handler))
 }
 
@@ -83,7 +89,13 @@ func (s *Server) RegisterMockRouter() {
 		ctx.JSON(http.StatusOK, struct {
 			Word string `json:"word"`
 		}{
-			Word: "hello world~",
+			Word: "hello world!",
 		})
+	})
+}
+
+func (s *Server) RegisterMonitorRouter() {
+	s.engine.Any("/metrics", func(ctx *gin.Context) {
+		promhttp.Handler().ServeHTTP(ctx.Writer, ctx.Request)
 	})
 }
